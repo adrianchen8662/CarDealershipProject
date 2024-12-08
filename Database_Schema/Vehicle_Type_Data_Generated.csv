@@ -1,0 +1,21 @@
+Vehicle_ID,Make,Model,Year,Tire_Type,Engine_Type
+944064,MINI,Cooper,2009,Lane,#b7e
+740233,Mercury,Grand Marquis,1993,Center,#180
+971006,Dodge,Challenger,2009,Lane,#167
+983981,Mitsubishi,Eclipse,2004,Lane,#139
+620017,Ford,E-Series,2004,Way,#9ef
+562392,Cadillac,CTS-V,2009,Avenue,#b2e
+298852,Mazda,Tribute,2001,Plaza,#1a7
+824204,Lexus,ES,2004,Lane,#27d
+650221,Toyota,Camry,2003,Alley,#131
+468037,Ford,Laser,1989,Avenue,#fd7
+997208,BMW,645,2004,Street,#c80
+545765,Mazda,MX-5,1996,Way,#11c
+781004,Ford,F250,2003,Terrace,#96a
+315304,Hyundai,Elantra,2012,Plaza,#0d1
+186630,Hyundai,Elantra,2003,Alley,#82e
+646356,Jaguar,XJ,2012,Way,#cdc
+103297,Lincoln,Navigator L,2012,Circle,#481
+364984,Mercedes-Benz,W201,1988,Avenue,#e72
+384908,Suzuki,Grand Vitara,2010,Hill,#ae1
+465662,Chevrolet,Corsica,1996,Avenue,#48f
