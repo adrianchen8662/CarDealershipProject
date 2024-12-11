@@ -1,7 +1,11 @@
 # Database Schema and Mock Data
 
 ## Mock Data
-Data for tables was generated using [Mockaroo](mockaroo.com) and custom Python scripts to handle foreign keys
+Data for tables was generated using [Mockaroo](https://mockaroo.com) and custom Python scripts to handle foreign keys
+Tables that contain a mix of foreign keys, primary keys and values are generated with the "_NF" in its name to denote that it does not contain foreign keys
+[Table_Name]_Data_Generated.csv are completed mock data .csv files, ready to be imported into MySQL Workbench to be populated. 
+
+To populate tables in MySQL, 
 ### Mockeroo Fields
 #### Customer - Generated 100 lines
 | **Field Name** | **Type**                       |
@@ -14,14 +18,12 @@ Data for tables was generated using [Mockaroo](mockaroo.com) and custom Python s
 | Phone          | Phone                          |
 | Address        | Street Address                 |
 #### Task - Generated 200 lines
-| **Field Name** | **Type**                      |
-|----------------|-------------------------------|
-| Vehicle_ID     | Number, from 100000 to 999999 |
-| Make           | Car Make                      |
-| Model          | Car Model                     |
-| Year           | Car Model Year                |
-| Tire_Type      | Street Suffix                 |
-| Engine_Type    | Short Hex Color               |
+| **Field Name** | **Type**                             |
+|-----------------|-------------------------------------|
+| Task_ID         | Number, from 100000 to 999999       |
+| Name            | First Name                          |
+| Estd_Time       | Time, 12:00 AM to 11:59 PM, 24 Hour |
+| Estd_Labor_Cost | Number, 1 to 1000, 2 decimals       |
 #### Vehicle Type - Generated 20 lines
 | **Field Name** | **Type**                      |
 |----------------|-------------------------------|
@@ -37,10 +39,22 @@ Data for tables was generated using [Mockaroo](mockaroo.com) and custom Python s
 | Package_ID          | Number, from 100000 to 999999 |
 | Name                | Color                         |
 | Time_Since_Purchase | Number, from 1 to 1000        |
-#### Time Slot
-| Field_Name   | Type                                    |
-|--------------|-----------------------------------------|
-| Time_Slot_ID | Number, from 100000 to 999999           |
-| Start_Time   | Datetime, from 01/01/2022 to 12/31/2022 |
-| End_Time     | Datetime, from 01/01/2023 to 12/31/2023 |
-| Date         | Datetime, from 01/01/2021 to 12/31/2022 |
+#### Time Slot - Generated 100 lines
+| **Field_Name** | **Type**                                |
+|----------------|-----------------------------------------|
+| Time_Slot_ID   | Number, from 100000 to 999999           |
+| Start_Time     | Datetime, from 01/01/2022 to 12/31/2022 |
+| End_Time       | Datetime, from 01/01/2023 to 12/31/2023 |
+| Date           | Datetime, from 01/01/2021 to 12/31/2022 |
+#### Part - Generated 500 lines
+| **Field_Name** | **Type**                          |
+|----------------|-----------------------------------|
+| Part_ID        | Number, from 100000 to 999999     |
+| Cost_Of_Part   | Number, from 1 to 100, 2 decimals |
+| Name           | Currency                          |
+| Task_Task_ID   | Foreign Key from table Task       |
+#### Used In - Generated 500 lines
+| **Field_Name**          | **Type**                            |
+|-------------------------|-------------------------------------|
+| Vehicle_Type_Vehicle_ID | Foreign Key from table Vehicle Type |
+| Part_Part_ID            | Foreign Key from table Part         |
