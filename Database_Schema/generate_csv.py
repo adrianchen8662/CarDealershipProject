@@ -208,7 +208,7 @@ Randomly combines the primary keys for two Tasks for a given amount to generate
 '''
 def GenerateFailureRequiresCSV(combinations_to_generate):
     print("Generating Failure Requires Table")
-    task_pandas_1 = pd.read_csv("Task_Data_Generated.cs")
+    task_pandas_1 = pd.read_csv("Task_Data_Generated.csv")
     task_pandas_2 = pd.read_csv("Task_Data_Generated.csv")
     task_list_1 = task_pandas_1[task_pandas_1.columns[0]].tolist()
     task_list_2 = task_pandas_2[task_pandas_2.columns[0]].tolist()
