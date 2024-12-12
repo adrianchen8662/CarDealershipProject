@@ -115,20 +115,66 @@ Generates Appointments table using Package, Time Slot, Customer and Car primary 
 '''
 def generateAppointmentCSV():
     print("Generating Appointments Table")
-    return
+
+    appointment_pandas = pd.read_csv("Appointment_Data_Generated_NF.csv")
+    purchase_matrix = appointment_pandas[appointment_pandas.columns[0]]
+
+    randomized_id_list = []
+    package_pandas = pd.read_csv("Package_Data_Generated.csv")
+    package_matrix = package_pandas[package_pandas.columns[0]]
+    id_list = package_matrix.tolist()
+    for i in range(purchase_matrix.size):
+        randomized_id_list.append(random.choice(id_list))
+    appointment_pandas["Package_Package_ID"] = randomized_id_list
+
+    randomized_id_list = []
+    time_slot_pandas = pd.read_csv("Time_Slot_Data_Generated.csv")
+    time_slot_matrix = time_slot_pandas[time_slot_pandas.columns[0]]
+    id_list = time_slot_matrix.tolist()
+    for i in range(purchase_matrix.size):
+        randomized_id_list.append(random.choice(id_list))
+    appointment_pandas["Time_Slot_Time_Slot_ID"] = randomized_id_list
+
+    randomized_id_list = []
+    customer_pandas = pd.read_csv("Customer_Data_Generated.csv")
+    customer_matrix = customer_pandas[customer_pandas.columns[0]]
+    id_list = customer_matrix.tolist()
+    for i in range(purchase_matrix.size):
+        randomized_id_list.append(random.choice(id_list))
+    appointment_pandas["Customer_Customer_ID"] = randomized_id_list
+
+    randomized_id_list = []
+    car_pandas = pd.read_csv("Car_Data_Generated.csv")
+    car_matrix = car_pandas[car_pandas.columns[0]]
+    id_list = car_matrix.tolist()
+    for i in range(purchase_matrix.size):
+        randomized_id_list.append(random.choice(id_list))
+    appointment_pandas["Car_Car_ID"] = randomized_id_list
+
+    appointment_pandas.to_csv("Appointment_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys in Appointment and Task for a given amount to generate
 '''
 def GenerateAdditionallyScheduledCSV(combinations_to_generate):
     print("Generating Additionally Scheduled Table")
-    return
+    
+    appointment_pandas = pd.read_csv("Appointment_Data_Generated.csv")
+    task_pandas = pd.read_csv("Task_Data_Generated.csv")
+    appointment_list = appointment_pandas[appointment_pandas.columns[0]].tolist()
+    task_list = task_pandas[task_pandas.columns[0]].tolist()
+
+    combined_keys = [(random.choice(appointment_list), random.choice(task_list)) for _ in range(combinations_to_generate)]
+    column_names = ["Appointment_Appointment_ID", "Task_Task_ID"]
+
+    pd.DataFrame(combined_keys,columns=column_names).to_csv("Addionally_Scheduled_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys in Appointment and Task for a given amount to generate and a pre-existing Was_Performed_Data_Generated.csv that contains all other non-foreign key data
 '''
 def GenerateWasPerformedCSV(combinations_to_generate):
     print("Generating Was Performed Table")
+    # TODO 
     return
 
 '''
@@ -136,6 +182,7 @@ Randomly combines the primary keys in Appointment and Package for a given amount
 '''
 def GenerateRecommendsCSV(combinations_to_generate):
     print("Generating Recommends Table")
+    # TODO 
     return
 
 '''
@@ -143,6 +190,17 @@ Randomly combines the primary keys in Appointment and Part for a given amount to
 '''
 def GenerateWasReplacedCSV(combinations_to_generate):
     print("Generating Was Replaced Table")
+
+    appointment_pandas = pd.read_csv("Appointment_Data_Generated.csv")
+    part_pandas = pd.read_csv("Part_Data_Generated.csv")
+    appointment_list = appointment_pandas[appointment_pandas.columns[0]].tolist()
+    part_list = part_pandas[part_pandas.columns[0]].tolist()
+
+    combined_keys = [(random.choice(appointment_list), random.choice(part_list)) for _ in range(combinations_to_generate)]
+    column_names = ["Appointment_Appointment_ID", "Part_Part_ID"]
+
+    pd.DataFrame(combined_keys,columns=column_names).to_csv("Was_Replaced_Data_Generated.csv", index=False)
+
     return
 
 '''
@@ -150,6 +208,15 @@ Randomly combines the primary keys for two Tasks for a given amount to generate
 '''
 def GenerateFailureRequiresCSV(combinations_to_generate):
     print("Generating Failure Requires Table")
+    task_pandas_1 = pd.read_csv("Task_Data_Generated.cs")
+    task_pandas_2 = pd.read_csv("Task_Data_Generated.csv")
+    task_list_1 = task_pandas_1[task_pandas_1.columns[0]].tolist()
+    task_list_2 = task_pandas_2[task_pandas_2.columns[0]].tolist()
+
+    combined_keys = [(random.choice(task_list_1), random.choice(task_list_2)) for _ in range(combinations_to_generate)]
+    column_names = ["Task_Task_ID1", "Task_Task_ID2"]
+
+    pd.DataFrame(combined_keys,columns=column_names).to_csv("Failure_Requires_Data_Generated.csv", index=False)
     return
 
 '''
@@ -198,11 +265,13 @@ if __name__ == "__main__":
     generateOwnsCSV(500)
     generatePurchaseCSV()
     generateMadePurchaseCSV(500)
-    '''
+    
     generateAppointmentCSV()
     GenerateAdditionallyScheduledCSV(500)
     GenerateWasPerformedCSV(500)
     GenerateRecommendsCSV(500)
     GenerateWasReplacedCSV(500)
     GenerateFailureRequiresCSV(500)
-    '''
+
+    print("CSV files successfully generated!")
+    print("Import everything but _NF CSV files into the corresponding MySQL Workbench table")

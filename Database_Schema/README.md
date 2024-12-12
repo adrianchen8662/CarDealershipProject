@@ -5,7 +5,9 @@ Data for tables was generated using [Mockaroo](https://mockaroo.com) and custom 
 Tables that contain a mix of foreign keys, primary keys and values are generated with the "_NF" in its name to denote that it does not contain foreign keys
 [Table_Name]_Data_Generated.csv are completed mock data .csv files, ready to be imported into MySQL Workbench to be populated. 
 
-To populate tables in MySQL, 
+To populate tables in MySQL, open the [SQL Model](Car_Dealership_Database_Schema.mwb) and import information in the Inserts tab. 
+Once all tables have been populated, select in the top bar Database -> Forward Engineer. The options "Generate separate CREATE INDEX statements" and "Generate INSERT statements for tables" should be selected. Save it as a file. An [example](Forward_Engineer_SQL.sql) is included. 
+
 ### Mockeroo Fields
 #### Customer - Generated 100 lines
 | **Field Name** | **Type**                       |
@@ -81,9 +83,21 @@ To populate tables in MySQL,
 | Date_Of_Purchase | Datetime, from 01/01/2022 to 12/31/2022 |
 | Sale_Price       | Number, from 20000 to 40000, 2 decimals |
 | Car_Car_ID       | Foreign Key from table Car              |
-
 #### Made Purchase - Generated 500 lines
 | **Field_Name**        | **Type**                        |
 |-----------------------|---------------------------------|
 | Customer_Customer_ID  | Foreign Key from table Customer |
 | Purchase_Purchase_ID  | Foreign Key from table Purchase |
+
+#### Appointments
+TODO
+#### Additionally Scheduled
+TODO
+#### Was Performed
+TODO
+#### Recommends
+TODO
+#### Was Replaced
+TODO
+#### Failure Requires
+TODO
