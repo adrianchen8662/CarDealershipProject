@@ -98,7 +98,7 @@ def generatePurchaseCSV():
 Randomly combines the primary keys in Customer and Purchase for a given amount to generate
 '''
 def generateMadePurchaseCSV(combinations_to_generate):
-    print("Genearting Made Purchase Table")
+    print("Generating Made Purchase Table")
 
     customer_pandas = pd.read_csv("Customer_Data_Generated.csv")
     purchase_pandas = pd.read_csv("Purchase_Data_Generated.csv")
@@ -114,36 +114,42 @@ def generateMadePurchaseCSV(combinations_to_generate):
 Generates Appointments table using Package, Time Slot, Customer and Car primary keys and a pre-existing Appointment_Data_Generated_NF.csv that contains all other non-foreign key data
 '''
 def generateAppointmentCSV():
+    print("Generating Appointments Table")
     return
 
 '''
 Randomly combines the primary keys in Appointment and Task for a given amount to generate
 '''
 def GenerateAdditionallyScheduledCSV(combinations_to_generate):
+    print("Generating Additionally Scheduled Table")
     return
 
 '''
 Randomly combines the primary keys in Appointment and Task for a given amount to generate and a pre-existing Was_Performed_Data_Generated.csv that contains all other non-foreign key data
 '''
 def GenerateWasPerformedCSV(combinations_to_generate):
+    print("Generating Was Performed Table")
     return
 
 '''
 Randomly combines the primary keys in Appointment and Package for a given amount to generate and a pre-existing Recommends_Data_Generated_NF.csv that contains all other non-foreign key data
 '''
 def GenerateRecommendsCSV(combinations_to_generate):
+    print("Generating Recommends Table")
     return
 
 '''
 Randomly combines the primary keys in Appointment and Part for a given amount to generate
 '''
 def GenerateWasReplacedCSV(combinations_to_generate):
+    print("Generating Was Replaced Table")
     return
 
 '''
 Randomly combines the primary keys for two Tasks for a given amount to generate
 '''
 def GenerateFailureRequiresCSV(combinations_to_generate):
+    print("Generating Failure Requires Table")
     return
 
 '''
