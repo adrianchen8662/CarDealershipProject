@@ -58,3 +58,32 @@ To populate tables in MySQL,
 |-------------------------|-------------------------------------|
 | Vehicle_Type_Vehicle_ID | Foreign Key from table Vehicle Type |
 | Part_Part_ID            | Foreign Key from table Part         |
+#### Car - Generated 500 lines
+| **Field_Name**          | **Type**                                |
+|-------------------------|-----------------------------------------|
+| Car_ID                  | Number, from 100000 to 999999           |
+| Interior                | Color                                   |
+| Odometer                | Number, from 1 to 100000                |
+| Color                   | Color                                   |
+| License_Plate_State     | State(abbrev)                           |
+| License_Plate           | Airport Region Code                     |
+| Cost                    | Number, from 20000 to 40000, 2 decimals |
+| Vehicle_Type_Vehicle_ID | Foreign Key from table Vehicle          |
+#### Owns - Generated 500 lines
+| **Field_Name**       | **Type**                        |
+|----------------------|---------------------------------|
+| Customer_Customer_ID | Foreign Key from table Customer |
+| Car_Car_ID           | Foreign Key from table Car      |
+#### Purchase - Generated 500 lines
+| **Field_Name**   | **Type**                                |
+|------------------|-----------------------------------------|
+| Purchase_ID      | Number, from 100000 to 999999           |
+| Date_Of_Purchase | Datetime, from 01/01/2022 to 12/31/2022 |
+| Sale_Price       | Number, from 20000 to 40000, 2 decimals |
+| Car_Car_ID       | Foreign Key from table Car              |
+
+#### Made Purchase - Generated 500 lines
+| **Field_Name**        | **Type**                        |
+|-----------------------|---------------------------------|
+| Customer_Customer_ID  | Foreign Key from table Customer |
+| Purchase_Purchase_ID  | Foreign Key from table Purchase |
