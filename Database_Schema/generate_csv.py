@@ -223,16 +223,74 @@ Randomly combines the primary keys in Appointment and Task for a given amount to
 '''
 def GenerateWasPerformedCSV(combinations_to_generate):
     print("Generating Was Performed Table")
-    # TODO 
-    return
+    appointment_pandas = pd.read_csv("Appointment_Data_Generated.csv")
+    task_pandas = pd.read_csv("Task_Data_Generated.csv")
+    was_performed_pandas = pd.read_csv("Was_Performed_Data_Generated_NF.csv")
+    appointment_matrix = appointment_pandas[appointment_pandas.columns[0]]
+    task_matrix = task_pandas[task_pandas.columns[0]]
+    was_performed_matrix = was_performed_pandas[was_performed_pandas.columns[0]]
+    
+    appointment_id_list = appointment_matrix.tolist()
+    task_id_list = task_matrix.tolist()
+    
+    # Track used combinations to ensure uniqueness
+    used_combinations = set()
+    appointment_randomized_list = []
+    task_randomized_list = []
+    
+    for _ in range(was_performed_matrix.size):
+        while True:
+            appointment_id = random.choice(appointment_id_list)
+            task_id = random.choice(task_id_list)
+            combination = (appointment_id, task_id)
+            
+            if combination not in used_combinations:  # Ensure the combination is unique
+                used_combinations.add(combination)
+                appointment_randomized_list.append(appointment_id)
+                task_randomized_list.append(task_id)
+                break  # Break the loop once a unique combination is found
+    
+    was_performed_pandas["Appointment_Appointment_ID"] = appointment_randomized_list
+    was_performed_pandas["Task_Task_ID"] = task_randomized_list
+
+    was_performed_pandas.to_csv("Was_Performed_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys in Appointment and Package for a given amount to generate and a pre-existing Recommends_Data_Generated_NF.csv that contains all other non-foreign key data
 '''
 def GenerateRecommendsCSV(combinations_to_generate):
     print("Generating Recommends Table")
-    # TODO 
-    return
+    package_pandas = pd.read_csv("Package_Data_Generated.csv")
+    task_pandas = pd.read_csv("Task_Data_Generated.csv")
+    recommends_pandas = pd.read_csv("Recommends_Data_Generated_NF.csv")
+    package_matrix = package_pandas[package_pandas.columns[0]]
+    task_matrix = task_pandas[task_pandas.columns[0]]
+    recommends_matrix = recommends_pandas[recommends_pandas.columns[0]]
+    
+    package_id_list = package_matrix.tolist()
+    task_id_list = task_matrix.tolist()
+    
+    # Track used combinations to ensure uniqueness
+    used_combinations = set()
+    package_randomized_list = []
+    task_randomized_list = []
+    
+    for _ in range(recommends_matrix.size):
+        while True:
+            package_id = random.choice(package_id_list)
+            task_id = random.choice(task_id_list)
+            combination = (package_id, task_id)
+            
+            if combination not in used_combinations:  # Ensure the combination is unique
+                used_combinations.add(combination)
+                package_randomized_list.append(package_id)
+                task_randomized_list.append(task_id)
+                break  # Break the loop once a unique combination is found
+    
+    recommends_pandas["Package_Package_ID"] = package_randomized_list
+    recommends_pandas["Task_Task_ID"] = task_randomized_list
+
+    recommends_pandas.to_csv("Recommends_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys in Appointment and Part for a given amount to generate
@@ -346,6 +404,9 @@ if __name__ == "__main__":
     GenerateWasReplacedCSV(300)
     GenerateFailureRequiresCSV(300)
     '''
+
+    GenerateWasPerformedCSV(300)
+    GenerateRecommendsCSV(300)
 
     if not os.path.exists("Part_Data_Generated.csv"):
         generatePartCSV()
