@@ -29,16 +29,28 @@ Randomly combines the primary keys in Vehicle Type and Part for a given amount t
 '''
 def generateUsedInCSV(combinations_to_generate):
     print("Generating Used In Table")
-
+    
+    # Load vehicle type and part data from CSV files
     vehicle_type_pandas = pd.read_csv("Vehicle_Type_Data_Generated.csv")
     part_pandas = pd.read_csv("Part_Data_Generated.csv")
+    
+    # Extract vehicle type and part IDs into lists
     vehicle_type_list = vehicle_type_pandas[vehicle_type_pandas.columns[0]].tolist()
     part_list = part_pandas[part_pandas.columns[0]].tolist()
-
-    combined_keys = [(random.choice(vehicle_type_list), random.choice(part_list)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of vehicle type IDs and part IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        vehicle_type_id = random.choice(vehicle_type_list)
+        part_id = random.choice(part_list)
+        combined_keys.add((vehicle_type_id, part_id))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Vehicle_Type_Vehicle_ID", "Part_Part_ID"]
-
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Used_In_Data_Generated.csv", index=False)
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Used_In_Data_Generated.csv", index=False)
 
 '''
 Generates Car table using Vehicle Type primary keys and a pre-existing Car_Data_Generated_NF.csv that contains all other non-foreign key data
@@ -64,16 +76,28 @@ Randomly combines the primary keys in Customer and Car for a given amount to gen
 '''
 def generateOwnsCSV(combinations_to_generate):
     print("Generating Owns Table")
-
+    
+    # Load customer and car data from CSV files
     customer_pandas = pd.read_csv("Customer_Data_Generated.csv")
     car_pandas = pd.read_csv("Car_Data_Generated.csv")
+    
+    # Extract customer and car IDs into lists
     customer_list = customer_pandas[customer_pandas.columns[0]].tolist()
     car_list = car_pandas[car_pandas.columns[0]].tolist()
-
-    combined_keys = [(random.choice(customer_list), random.choice(car_list)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of customer IDs and car IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        customer_id = random.choice(customer_list)
+        car_id = random.choice(car_list)
+        combined_keys.add((customer_id, car_id))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Customer_Customer_ID", "Car_Car_ID"]
-
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Owns_Data_Generated.csv", index=False)
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Owns_Data_Generated.csv", index=False)
 
 '''
 Generates Purchase table using Car primary keys and a pre-existing Purchase_Data_Generated_NF.csv that contains all other non-foreign key data
@@ -99,16 +123,29 @@ Randomly combines the primary keys in Customer and Purchase for a given amount t
 '''
 def generateMadePurchaseCSV(combinations_to_generate):
     print("Generating Made Purchase Table")
-
+    
+    # Load customer and purchase data from CSV files
     customer_pandas = pd.read_csv("Customer_Data_Generated.csv")
     purchase_pandas = pd.read_csv("Purchase_Data_Generated.csv")
+    
+    # Extract customer and purchase IDs into lists
     customer_list = customer_pandas[customer_pandas.columns[0]].tolist()
     purchase_list = purchase_pandas[purchase_pandas.columns[0]].tolist()
-
-    combined_keys = [(random.choice(customer_list), random.choice(purchase_list)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of customer IDs and purchase IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        customer_id = random.choice(customer_list)
+        purchase_id = random.choice(purchase_list)
+        combined_keys.add((customer_id, purchase_id))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Customer_Customer_ID", "Purchase_Purchase_ID"]
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Made_Purchase_Data_Generated.csv", index=False)
 
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Made_Purchase_Data_Generated.csv", index=False)
 
 '''
 Generates Appointments table using Package, Time Slot, Customer and Car primary keys and a pre-existing Appointment_Data_Generated_NF.csv that contains all other non-foreign key data
@@ -159,15 +196,27 @@ Randomly combines the primary keys in Appointment and Task for a given amount to
 def GenerateAdditionallyScheduledCSV(combinations_to_generate):
     print("Generating Additionally Scheduled Table")
     
+    # Load appointment and task data from CSV files
     appointment_pandas = pd.read_csv("Appointment_Data_Generated.csv")
     task_pandas = pd.read_csv("Task_Data_Generated.csv")
+    
+    # Extract appointment and task IDs into lists
     appointment_list = appointment_pandas[appointment_pandas.columns[0]].tolist()
     task_list = task_pandas[task_pandas.columns[0]].tolist()
-
-    combined_keys = [(random.choice(appointment_list), random.choice(task_list)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of appointment IDs and task IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        appointment_id = random.choice(appointment_list)
+        task_id = random.choice(task_list)
+        combined_keys.add((appointment_id, task_id))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Appointment_Appointment_ID", "Task_Task_ID"]
-
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Addionally_Scheduled_Data_Generated.csv", index=False)
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Additionally_Scheduled_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys in Appointment and Task for a given amount to generate and a pre-existing Was_Performed_Data_Generated.csv that contains all other non-foreign key data
@@ -190,34 +239,57 @@ Randomly combines the primary keys in Appointment and Part for a given amount to
 '''
 def GenerateWasReplacedCSV(combinations_to_generate):
     print("Generating Was Replaced Table")
-
+    
+    # Load appointment and part data from CSV files
     appointment_pandas = pd.read_csv("Appointment_Data_Generated.csv")
     part_pandas = pd.read_csv("Part_Data_Generated.csv")
+    
+    # Extract appointment and part IDs into lists
     appointment_list = appointment_pandas[appointment_pandas.columns[0]].tolist()
     part_list = part_pandas[part_pandas.columns[0]].tolist()
-
-    combined_keys = [(random.choice(appointment_list), random.choice(part_list)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of appointment IDs and part IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        appointment_id = random.choice(appointment_list)
+        part_id = random.choice(part_list)
+        combined_keys.add((appointment_id, part_id))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Appointment_Appointment_ID", "Part_Part_ID"]
-
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Was_Replaced_Data_Generated.csv", index=False)
-
-    return
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Was_Replaced_Data_Generated.csv", index=False)
 
 '''
 Randomly combines the primary keys for two Tasks for a given amount to generate
 '''
 def GenerateFailureRequiresCSV(combinations_to_generate):
     print("Generating Failure Requires Table")
+    
+    # Load task data from CSV files
     task_pandas_1 = pd.read_csv("Task_Data_Generated.csv")
     task_pandas_2 = pd.read_csv("Task_Data_Generated.csv")
+    
+    # Extract task IDs into lists
     task_list_1 = task_pandas_1[task_pandas_1.columns[0]].tolist()
     task_list_2 = task_pandas_2[task_pandas_2.columns[0]].tolist()
-
-    combined_keys = [(random.choice(task_list_1), random.choice(task_list_2)) for _ in range(combinations_to_generate)]
+    
+    # Generate unique combinations of two task IDs
+    combined_keys = set()
+    
+    while len(combined_keys) < combinations_to_generate:
+        task_id_1 = random.choice(task_list_1)
+        task_id_2 = random.choice(task_list_2)
+        if task_id_1 != task_id_2:  # Ensuring the two tasks are not the same
+            combined_keys.add((task_id_1, task_id_2))
+    
+    # Convert the set of unique combinations to a DataFrame
     column_names = ["Task_Task_ID1", "Task_Task_ID2"]
-
-    pd.DataFrame(combined_keys,columns=column_names).to_csv("Failure_Requires_Data_Generated.csv", index=False)
-    return
+    combined_keys_list = list(combined_keys)
+    
+    pd.DataFrame(combined_keys_list, columns=column_names).to_csv("Failure_Requires_Data_Generated.csv", index=False)
 
 '''
 Checks for primary key duplicates in the tables that don't contain any foreign keys to prevent issues in the future
@@ -230,7 +302,8 @@ def checkIDDuplication(csv_list):
                     "Part_Data_Generated_NF.csv",
                     "Task_Data_Generated.csv",
                     "Time_Slot_Data_Generated.csv",
-                    "Vehicle_Type_Data_Generated.csv"]
+                    "Vehicle_Type_Data_Generated.csv",
+                    "Car_Data_Generated.csv"]
     
     for i in csv_list:
         if i in allowed_list:
@@ -259,19 +332,45 @@ if __name__ == "__main__":
     print()
     print("Generating files with foreign keys")
 
+    '''
     generatePartCSV()
-    generateUsedInCSV(500)
+    generateUsedInCSV(300)
     generateCarCSV()
-    generateOwnsCSV(500)
+    generateOwnsCSV(300)
     generatePurchaseCSV()
-    generateMadePurchaseCSV(500)
-    
+    generateMadePurchaseCSV(300)
     generateAppointmentCSV()
-    GenerateAdditionallyScheduledCSV(500)
-    GenerateWasPerformedCSV(500)
-    GenerateRecommendsCSV(500)
-    GenerateWasReplacedCSV(500)
-    GenerateFailureRequiresCSV(500)
+    GenerateAdditionallyScheduledCSV(300)
+    GenerateWasPerformedCSV(300)
+    GenerateRecommendsCSV(300)
+    GenerateWasReplacedCSV(300)
+    GenerateFailureRequiresCSV(300)
+    '''
+
+    if not os.path.exists("Part_Data_Generated.csv"):
+        generatePartCSV()
+    if not os.path.exists("Used_In_Data_Generated.csv"):
+        generateUsedInCSV(300)
+    if not os.path.exists("Car_Data_Generated.csv"):
+        generateCarCSV()
+    if not os.path.exists("Owns_Data_Generated.csv"):
+        generateOwnsCSV(300)
+    if not os.path.exists("Purchase_Data_Generated.csv"):
+        generatePurchaseCSV()
+    if not os.path.exists("Made_Purchase_Data_Generated.csv"):
+        generateMadePurchaseCSV(300)
+    if not os.path.exists("Appointment_Data_Generated.csv"):
+        generateAppointmentCSV()
+    if not os.path.exists("Additionally_Scheduled_Data_Generated.csv"):
+        GenerateAdditionallyScheduledCSV(300)
+    if not os.path.exists("Was_Performed_Data_Generated.csv"):
+        GenerateWasPerformedCSV(300)
+    if not os.path.exists("Recommends_Data_Generated.csv"):
+        GenerateRecommendsCSV(300)
+    if not os.path.exists("Was_Replaced_Data_Generated.csv"):
+        GenerateWasReplacedCSV(300)
+    if not os.path.exists("Failure_Requires_Data_Generated.csv"):
+        GenerateFailureRequiresCSV(300)
 
     print("CSV files successfully generated!")
     print("Import everything but _NF CSV files into the corresponding MySQL Workbench table")
