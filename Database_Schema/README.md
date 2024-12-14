@@ -1,12 +1,13 @@
 # Database Schema and Mock Data
 
 ## Mock Data
-Data for tables was generated using [Mockaroo](https://mockaroo.com) and custom Python scripts to handle foreign keys
+Data for tables was generated using [Mockaroo](https://mockaroo.com) and [a custom Python script](generate_csv.py) to handle foreign keys
 Tables that contain a mix of foreign keys, primary keys and values are generated with the "_NF" in its name to denote that it does not contain foreign keys
 [Table_Name]_Data_Generated.csv are completed mock data .csv files, ready to be imported into MySQL Workbench to be populated. 
 
 To populate tables in MySQL, open the [SQL Model](Car_Dealership_Database_Schema.mwb) and import information in the Inserts tab. 
 Once all tables have been populated, select in the top bar Database -> Forward Engineer. The options "Generate separate CREATE INDEX statements" and "Generate INSERT statements for tables" should be selected. Save it as a file. An [example](Forward_Engineer_SQL.sql) is included. 
+With an instance of MySQL open in MySQL Workbench, select in the side Navigator Data Import/Restore. Select Import from Self-Contained File, and select the sql file. Start import. There should be a schema present in the MySQL instance called car_dealership_database with example data populated into it, as long as "Generate INSERT statements for tables" was selected during the Forward Engineering step. 
 
 ### Mockeroo Fields
 #### Customer - Generated 100 lines
