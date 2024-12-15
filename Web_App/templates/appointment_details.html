@@ -6,7 +6,6 @@
     <title>Appointment Details</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
-        /* Reuse the styles from previous files */
         * {
             margin: 0;
             padding: 0;
@@ -82,30 +81,48 @@
             background-color: #4951c8;
         }
 
-        .back-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #5c67f2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .back-btn:hover {
-            background-color: #4951c8;
-        }
-
-        footer {
+        .back-btn-bar {
             background-color: #333;
-            color: #fff;
+            color: white;
+            text-align: center;
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             bottom: 0;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
         }
+
+        .back-btn-bar:hover {
+            background-color: #4951c8;
+        }
+
+        .notifications ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px auto;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .notifications li {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .notifications li.success {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .notifications li.error {
+            background-color: #f44336; /* Red */
+        }
+
     </style>
 </head>
 <body>
@@ -113,6 +130,18 @@
     <header>
         <h1>Appointment Details</h1>
     </header>
+
+    <div class="notifications">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+    </div>    
 
     <div class="container">
         <!-- Forms for various actions -->
@@ -123,13 +152,29 @@
             <input type="submit" value="Drop Off Car" class="btn">
         </form>
 
-        <!-- Back to Main Page Button -->
-        <button class="back-btn" onclick="window.location.href='/';">Back to Main Page</button>
+        <form action="/picked_car_up" method="POST">
+            <h2>Pick Up Car</h2>
+            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+            <input type="datetime-local" name="pick_up" required>
+            <input type="submit" value="Pick Up Car" class="btn">
+        </form>
+
+        <form action="/set_package" method="POST">
+            <h2>Set Package</h2>
+            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+            <input type="text" name="package_id" placeholder="Package ID" required>
+            <input type="submit" value="Set Package" class="btn">
+        </form>
+
+        <form action="/generate_bill" method="GET">
+            <h2>Generate Bill</h2>
+            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+            <input type="submit" value="Generate Bill" class="btn">
+        </form>
     </div>
 
-    <footer>
-        <p>Car Dealership Management System, made in Python Flask</p>
-    </footer>
+    <!-- Back to Main Page Bar -->
+    <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
 
 </body>
 </html>

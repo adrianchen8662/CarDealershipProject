@@ -106,7 +106,6 @@
         .back-btn-bar:hover {
             background-color: #4951c8;
         }
-
     </style>
 </head>
 <body>
@@ -116,7 +115,7 @@
     </header>
 
     <div class="container">
-        <form action="/new_appointment" method="GET">
+        <form action="/new_appointment" method="GET" onsubmit="return validateForm()">
             <label for="email">Customer Email:</label>
             <input type="email" id="email" name="email" required>
 
@@ -124,13 +123,11 @@
             <input type="text" id="car_id" name="car_car_id" required>
 
             <label for="appointment_date">Appointment Date:</label>
-            <input type="date" id="appointment_date" name="appointment_made_date" required>
+            <input type="date" id="appointment_date" name="appointment_made_date" required onchange="fetchAvailableTimeSlots()">
 
             <label for="time_slot">Select Available Time Slot:</label>
             <select id="time_slot" name="time_slot_time_slot_id" required>
-                {% for slot in time_slots %}
-                    <option value="{{ slot['Time_Slot_ID'] }}">{{ slot['Start_Time'] }} - {{ slot['End_Time'] }}</option>
-                {% endfor %}
+                <option value="">Select a time slot</option>
             </select>
 
             <div class="btn-container">
@@ -142,5 +139,48 @@
     <!-- Back to Main Page Bar -->
     <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
 
+    <script>
+        // Fetch available time slots for the selected appointment date
+        async function fetchAvailableTimeSlots() {
+            const appointmentDate = document.getElementById('appointment_date').value;
+            const timeSlotSelect = document.getElementById('time_slot');
+
+            // Clear the existing options
+            timeSlotSelect.innerHTML = '<option value="">Loading...</option>';
+
+            try {
+                const response = await fetch(`/get_time_slots?date=${appointmentDate}`);
+                const data = await response.json();
+
+                timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+
+                if (data.time_slots && data.time_slots.length > 0) {
+                    data.time_slots.forEach(slot => {
+                        const startTime = new Date(slot.Start_Time).toLocaleString();
+                        const endTime = new Date(slot.End_Time).toLocaleString();
+                        const option = document.createElement('option');
+                        option.value = slot.Time_Slot_ID;
+                        option.textContent = `From: ${startTime} To: ${endTime}`;
+                        timeSlotSelect.appendChild(option);
+                    });
+                } else {
+                    timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                }
+            } catch (error) {
+                console.error('Error fetching time slots:', error);
+                timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
+            }
+        }
+
+        // Validate form before submission
+        function validateForm() {
+            const timeSlot = document.getElementById('time_slot').value;
+            if (!timeSlot) {
+                alert("Please select a valid time slot for the chosen appointment date.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect, flash, url_for
 import mysql.connector
 import random
+import os
 
 # Setup connection to the database. This varies with system
 mydb = mysql.connector.connect(
@@ -11,6 +12,7 @@ mydb = mysql.connector.connect(
 )
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Generates a random key each time the app starts
 
 # Flask frontend implemented using render_template library
 @app.route('/')
@@ -47,19 +49,6 @@ def appointment_details():
 # Internal function to find if customer exists based on email
 def find_customer(email):
   mycursor = mydb.cursor()
-  mycursor.execute(f"""
-      SELECT Customer_ID
-      FROM Customer
-      WHERE email = '{email}';
-  """)
-  myresult = mycursor.fetchall()
-  print(myresult)
-  return myresult
-
-# Application 1 API
-# Internal function to find if customer exists based on email
-def find_customer(email):
-  mycursor = mydb.cursor()
   mycursor.execute("""
       SELECT Customer_ID, F_Name, L_Name
       FROM Customer
@@ -68,6 +57,18 @@ def find_customer(email):
   myresult = mycursor.fetchone()
   return myresult
 
+def find_customer_by_car(car_id):
+    mycursor = mydb.cursor()
+    mycursor.execute("""
+        SELECT Customer_Customer_ID
+        FROM Owns
+        WHERE Car_Car_ID = %s;
+    """, (car_id,))
+    result = mycursor.fetchone()
+    return result[0] if result else None
+
+
+# Application 1 API
 # Internal function to check if car exists
 def find_car(car_id):
   mycursor = mydb.cursor()
@@ -125,6 +126,27 @@ def create_customer():
   }
   return jsonify(response), 201
 
+@app.route('/get_time_slots', methods=['GET'])
+def get_time_slots():
+    appointment_date = request.args.get('date')
+    if not appointment_date:
+        return jsonify({"error": "No date provided"}), 400
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("""
+        SELECT Time_Slot_ID, Start_Time, End_Time 
+        FROM Time_Slot 
+        WHERE %s BETWEEN DATE(Start_Time) AND DATE(End_Time)
+          AND Time_Slot_ID NOT IN (
+            SELECT Time_Slot_Time_Slot_ID 
+            FROM Appointment 
+            WHERE %s BETWEEN DATE(Appointment_Made_Date) AND DATE(Appointment_Made_Date)
+        );
+    """, (appointment_date, appointment_date))
+    time_slots = mycursor.fetchall()
+
+    return jsonify({"time_slots": time_slots}), 200
+
 # Records sale to relevant tables and junction tables
 @app.route('/record_sale', methods=['POST'])
 def record_sale():
@@ -163,12 +185,12 @@ def record_sale():
     """, (Purchase_ID, Date_Of_Purchase, Sale_Price, Car_ID))
 
     mycursor.execute("""
-        INSERT INTO Made_Purchase (Customer_ID, Purchase_ID) 
+        INSERT INTO Made_Purchase (Customer_Customer_ID, Purchase_Purchase_ID) 
         VALUES (%s, %s);
     """, (Customer_ID, Purchase_ID))
 
     mycursor.execute("""
-        INSERT INTO Owns (Customer_ID, Car_ID) 
+        INSERT INTO Owns (Customer_Customer_ID, Car_Car_ID) 
         VALUES (%s, %s);
     """, (Customer_ID, Car_ID))
 
@@ -214,64 +236,89 @@ def new_appointment():
   
 @app.route("/dropped_car_off", methods=['POST'])
 def dropped_car_off():
-  Appointment_ID = request.args['appointment_id']
-  Drop_Off = request.args['drop_off']
+    Appointment_ID = request.form.get('appointment_id')
+    Drop_Off = request.form.get('drop_off')
 
-  mycursor = mydb.cursor()
-  mycursor.execute(f"""
-      UPDATE Appointment
-      SET Drop_Off = "{Drop_Off}"
-      WHERE Appointment_ID = {Appointment_ID};
-  """)
-  return "Drop-Off Time Updated. "
+    if not Appointment_ID or not Drop_Off:
+        flash("Missing appointment ID or drop-off time.", "error")
+        return redirect(url_for('appointment_details'))
+
+    mycursor = mydb.cursor()
+    mycursor.execute("""
+        UPDATE Appointment
+        SET Drop_Off = %s
+        WHERE Appointment_ID = %s;
+    """, (Drop_Off, Appointment_ID))
+    mydb.commit()
+
+    flash("Drop-off time updated successfully!", "success")
+    return redirect(url_for('appointment_details'))
+
 
 @app.route("/picked_car_up", methods=['POST'])
 def picked_car_up():
-  Appointment_ID = request.args['appointment_id']
-  Package_Package_ID = request.args['package_package_id']
-  
-  mycursor = mydb.cursor()
-  mycursor.execute(f"""
-      UPDATE Appointment
-      SET Package_Package_ID = "{Package_Package_ID}"
-      WHERE Appointment_ID = {Appointment_ID};
-  """)
-  return "Pick-Up Time Updated. "
+    Appointment_ID = request.form.get('appointment_id')
+    Pick_Up = request.form.get('pick_up')
+
+    if not Appointment_ID or not Pick_Up:
+        flash("Missing appointment ID or pick-up time", "error")
+        return redirect(url_for('appointment_details'))
+
+    mycursor = mydb.cursor()
+    mycursor.execute("""
+        UPDATE Appointment
+        SET Pick_Up = %s
+        WHERE Appointment_ID = %s;
+    """, (Pick_Up, Appointment_ID))
+    mydb.commit()
+
+    flash("Pick-up information updated successfully!", "success")
+    return redirect(url_for('appointment_details'))
+
 
 @app.route("/set_package", methods=['POST'])
 def set_package():
-  Appointment_ID = request.args['appointment_id']
-  Pick_Up = request.args['pick_up']
-  
-  mycursor = mydb.cursor()
-  mycursor.execute(f"""
-      UPDATE Appointment
-      SET Pick_Up = "{Pick_Up}"
-      WHERE Appointment_ID = {Appointment_ID};
-  """)
-  return "Package updated. "
+    Appointment_ID = request.form.get('appointment_id')
+    Package_ID = request.form.get('package_id')
 
-@app.route("/generate_bill", methods=['GET'])
+    if not Appointment_ID or not Package_ID:
+        flash("Missing appointment ID or package ID.", "error")
+        return redirect(url_for('appointment_details'))
+
+    mycursor = mydb.cursor()
+    mycursor.execute("""
+        UPDATE Appointment
+        SET Package_Package_ID = %s
+        WHERE Appointment_ID = %s;
+    """, (Package_ID, Appointment_ID))
+    mydb.commit()
+
+    flash("Package details updated successfully!", "success")
+    return redirect(url_for('appointment_details'))
+
+
+@app.route("/generate_bill", methods=["GET"])
 def generate_bill():
-  Appointment_ID = request.args['appointment_id']
+    Appointment_ID = request.args.get("appointment_id")
+    mycursor = mydb.cursor(dictionary=True)
+    
+    mycursor.execute("""
+        SELECT a.Appointment_ID, c.F_Name, c.L_Name,
+               SUM(wp.Labor_Cost) AS Total_Labor_Cost,
+               SUM(pt.Cost_of_Part) AS Total_Parts_Cost,
+               SUM(wp.Labor_Cost) + IFNULL(SUM(pt.Cost_of_Part), 0) AS Total_Amount
+        FROM Appointment a
+        JOIN Customer c ON a.Customer_Customer_ID = c.Customer_ID
+        LEFT JOIN Was_Performed wp ON a.Appointment_ID = wp.Appointment_Appointment_ID
+        LEFT JOIN Was_Replaced wr ON a.Appointment_ID = wr.Appointment_Appointment_ID
+        LEFT JOIN Part pt ON wr.Part_Part_ID = pt.Part_ID
+        WHERE a.Appointment_ID = %s
+        GROUP BY a.Appointment_ID, c.F_Name, c.L_Name;
+    """, (Appointment_ID,))
+    bill = mycursor.fetchone()
 
-  mycursor = mydb.cursor()
-  mycursor.execute(f"""
-    SELECT a.Appointment_ID, 
-        c.F_Name, c.L_Name,
-        SUM(wp.Labor_Cost) AS Total_Labor_Cost,
-        SUM(pt.Cost_of_Part) AS Total_Parts_Cost,
-        SUM(wp.Labor_Cost) + IFNULL(SUM(pt.Cost_of_Part), 0) AS Total_Amount
-    FROM Appointment a
-    JOIN Customer c ON a.Customer_Customer_ID = c.Customer_ID
-    LEFT JOIN Was_Performed wp ON a.Appointment_ID = wp.Appointment_Appointment_ID
-    LEFT JOIN Was_Replaced wr ON a.Appointment_ID = wr.Appointment_Appointment_ID
-    LEFT JOIN Part pt ON wr.Part_Part_ID = pt.Part_ID
-    WHERE a.Appointment_ID = '{Appointment_ID}'
-    GROUP BY a.Appointment_ID, c.F_Name, c.L_Name;
-  """)
-  myresult = mycursor.fetchall()
-  return myresult
+    return render_template("bill_details.html", bill=bill)
+
 
 # Application 3 API
 @app.route('/list_sales', methods=['GET'])
