@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Customer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #5c67f2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #4951c8;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Add New Customer</h1>
+</header>
+
+<form action="/create_customer" method="post" id="customerForm">
+    <label for="f_name">First Name:</label>
+    <input type="text" id="f_name" name="f_name" required><br><br>
+
+    <label for="m_init">Middle Initial:</label>
+    <input type="text" id="m_init" name="m_init" maxlength="1"><br><br>
+
+    <label for="l_name">Last Name:</label>
+    <input type="text" id="l_name" name="l_name" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" required><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <button type="submit">Add Customer</button>
+</form>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    if (email) {
+        document.getElementById('email').value = email;
+    }
+
+    document.getElementById('customerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        fetch('/create_customer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.customer_id) {
+                window.location.href = '/sale_form';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Sale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        input[type="email"], input[type="number"], input[type="date"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #5c67f2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #4951c8;
+        }
+
+        /* Back Button Style */
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #5c67f2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #4951c8;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Record Car Sale</h1>
+</header>
+
+<form action="/record_sale" method="post" id="saleForm">
+    <label for="email">Customer Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="car_id">Car ID:</label>
+    <input type="number" id="car_id" name="car_id" required><br><br>
+
+    <label for="date_of_purchase">Date of Purchase:</label>
+    <input type="date" id="date_of_purchase" name="date_of_purchase" required><br><br>
+
+    <label for="sale_price">Sale Price:</label>
+    <input type="number" id="sale_price" name="sale_price" step="0.01" required><br><br>
+
+    <label for="license_plate_state">License Plate State:</label>
+    <input type="text" id="license_plate_state" name="license_plate_state" maxlength="2" required><br><br>
+
+    <label for="license_plate">License Plate Number:</label>
+    <input type="text" id="license_plate" name="license_plate" required><br><br>
+
+    <button type="submit">Record Sale</button>
+</form>
+
+<!-- Back to Main Page Button -->
+<button class="back-btn" onclick="window.location.href='/';">Back to Main Page</button>
+
+<script>
+  document.getElementById('saleForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData.entries());
+      
+      fetch('/record_sale', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+          alert(data.message);
+          if (data.status === 'customer_not_found') {
+              window.location.href = '/add_customer_form';  // Redirect to the add customer form
+          }
+      })
+      .catch(error => console.error('Error:', error));
+  });
+</script>
+
+</body>
+</html>

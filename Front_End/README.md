@@ -1,1 +1,0 @@
-# Car Dealership Project Frontend

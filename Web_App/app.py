@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, jsonify
 import mysql.connector
 import random
 
@@ -12,9 +12,22 @@ mydb = mysql.connector.connect(
 
 app = Flask(__name__)
 
+# Flask frontend implemented using render_template library
 @app.route('/')
-def main():
-  return "Hello World!"
+def index():
+  return render_template('index.html')
+
+@app.route('/sale_form')
+def sale_form():
+  return render_template('sale_form.html')
+
+@app.route('/add_customer_form')
+def add_customer_form():
+  return render_template('add_customer.html')
+
+@app.route('/list_sales_form')
+def list_sales_form():
+    return render_template('list_sales.html')
 
 # Internal function to find if customer exists based on email
 def find_customer(email):
@@ -25,95 +38,145 @@ def find_customer(email):
       WHERE email = '{email}';
   """)
   myresult = mycursor.fetchall()
+  print(myresult)
   return myresult
 
 # Application 1 API
-# If customer exists based on email, use Customer_ID and update information. Else, generate a new Customer_ID
-@app.route('/add_customer', methods = ['GET','POST'])
-def add_customer():
-  
-  F_Name = request.args['f_name']
-  M_Init = request.args['m_init']
-  L_Name = request.args['l_name']
-  Email = request.args['email']
-  Phone = request.args['phone']
-  Address = request.args['address']
+# Internal function to find if customer exists based on email
+def find_customer(email):
+  mycursor = mydb.cursor()
+  mycursor.execute("""
+      SELECT Customer_ID, F_Name, L_Name
+      FROM Customer
+      WHERE Email = %s;
+  """, (email,))
+  myresult = mycursor.fetchone()
+  return myresult
 
+# Internal function to check if car exists
+def find_car(car_id):
+  mycursor = mydb.cursor()
+  mycursor.execute("""
+      SELECT Car_ID
+      FROM Car
+      WHERE Car_ID = %s;
+  """, (car_id,))
+  myresult = mycursor.fetchone()
+  return myresult
+
+# API to add or update customer information if not found
+@app.route('/add_customer', methods=['POST'])
+def add_customer():
+  data = request.json  # Expecting JSON input
+  Email = data['email']
+  Customer = find_customer(Email)
+
+  if Customer is None:  # Customer does not exist, request more information
+    response = {
+      "message": "Customer not found. Please provide first name, last name, and other details.",
+      "status": "customer_not_found"
+    }
+    return jsonify(response), 404
   
-  if not find_customer(Email):
-    print("No Customer Found")
-    Customer_ID = random.randint(100000,999999)
-  else:
-    print("Customer Found")
-    Customer_ID = find_customer(Email)[0]
-  
-  Customer_ID = random.randint(100000,999999)
+  response = {
+    "message": "Customer already exists.",
+    "customer_id": Customer[0]
+  }
+  return jsonify(response), 200
+
+@app.route('/create_customer', methods=['POST'])
+def create_customer():
+  data = request.json  # Expecting JSON input
+  F_Name = data['f_name']
+  M_Init = data.get('m_init', '')
+  L_Name = data['l_name']
+  Email = data['email']
+  Phone = data['phone']
+  Address = data['address']
+
+  Customer_ID = random.randint(100000, 999999)
   mycursor = mydb.cursor()
 
-  mycursor.execute(f"""
-      INSERT INTO Customer(Customer_ID,F_Name,M_Init,L_Name,Email,Phone,Address)
-      VALUES (
-          {Customer_ID},
-          '{F_Name}',
-          '{M_Init}',
-          '{L_Name}',
-          '{Email}',
-          '{Phone}',
-          '{Address}'
-      );
-  """)
-  return str(Customer_ID)
+  mycursor.execute("""
+      INSERT INTO Customer (Customer_ID, F_Name, M_Init, L_Name, Email, Phone, Address)
+      VALUES (%s, %s, %s, %s, %s, %s, %s);
+  """, (Customer_ID, F_Name, M_Init, L_Name, Email, Phone, Address))
+
+  mydb.commit()
+  
+  response = {
+    "message": "Customer created successfully.",
+    "customer_id": Customer_ID
+  }
+  return jsonify(response), 201
 
 # Records sale to relevant tables and junction tables
-@app.route('/record_sale', methods=['GET','POST'])
+@app.route('/record_sale', methods=['POST'])
 def record_sale():
-  Customer_ID = request.args['customer_id']
-  Car_ID = request.args['car_id']
-  Date_Of_Purchase = request.args['date_of_purchase']
-  Sale_Price = request.args['sale_price']
-  License_Plate_State = request.args['license_plate_state']
-  License_Plate = request.args['license_plate']
+  data = request.json  # Expecting JSON input
+  Email = data['email']
+  Car_ID = data['car_id']
+  Date_Of_Purchase = data['date_of_purchase']
+  Sale_Price = data['sale_price']
+  License_Plate_State = data['license_plate_state']
+  License_Plate = data['license_plate']
 
+  Customer = find_customer(Email)
+  if Customer is None:  # Customer does not exist, request more information
+    response = {
+      "message": "Customer not found. Redirecting to add customer form.",
+      "status": "customer_not_found"
+    }
+    return jsonify(response), 404
+  
+  Car = find_car(Car_ID)
+  if Car is None:  # Car does not exist, return error
+    response = {
+      "message": "Car not found. Please ensure the Car ID is correct.",
+      "status": "car_not_found"
+    }
+    return jsonify(response), 404
+  
+  Customer_ID = Customer[0]
   mycursor = mydb.cursor()
+  try:
+    Purchase_ID = random.randint(100000, 999999)
 
-  Purchase_ID = random.randint(100000,999999)
+    mycursor.execute("""
+        INSERT INTO Purchase (Purchase_ID, Date_Of_Purchase, Sale_Price, Car_Car_ID) 
+        VALUES (%s, %s, %s, %s);
+    """, (Purchase_ID, Date_Of_Purchase, Sale_Price, Car_ID))
 
-  # Insert for Purchase Table
-  mycursor.execute(f"""
-      INSERT INTO Purchase(Purchase_ID, Date_Of_Purchase, Sale_Price, Car_Car_ID) 
-      VALUES (
-          {Purchase_ID}
-          '{Date_Of_Purchase}', 
-          {Sale_Price}, 
-          {Car_ID},
-      );
-  """)
+    mycursor.execute("""
+        INSERT INTO Made_Purchase (Customer_ID, Purchase_ID) 
+        VALUES (%s, %s);
+    """, (Customer_ID, Purchase_ID))
 
-  # Insert for Made Purchase Junction Table
-  mycursor.execute(f"""
-      INSERT INTO Made_Purchase(Purchase_ID, Date_Of_Purchase, Sale_Price, Car_Car_ID) 
-      VALUES (
-          {Customer_ID},
-          {Purchase_ID}
-      );
-  """)
-  # Insert for Owns Junction Table
-  mycursor.execute(f"""
-      INSERT INTO Owns(Purchase_ID, Date_Of_Purchase, Sale_Price, Car_Car_ID) 
-      VALUES (
-          {Customer_ID},
-          {Car_ID}
-      );
-  """)
+    mycursor.execute("""
+        INSERT INTO Owns (Customer_ID, Car_ID) 
+        VALUES (%s, %s);
+    """, (Customer_ID, Car_ID))
 
-  # Update for Car Table (assuming that a License Plate_State and License_Plate are added at time of purchase)
-  mycursor.execute(f"""
-      UPDATE Car
-      SET License_Plate_State = '{License_Plate_State}', License_Plate = '{License_Plate}'
-      WHERE Car_ID = {Car_ID};
-  """)
+    mycursor.execute("""
+        UPDATE Car
+        SET License_Plate_State = %s, License_Plate = %s
+        WHERE Car_ID = %s;
+    """, (License_Plate_State, License_Plate, Car_ID))
 
-  return str(Purchase_ID)
+    mydb.commit()
+  except mysql.connector.Error as err:
+    mydb.rollback()
+    response = {
+      "message": f"An error occurred: {err}",
+      "status": "error"
+    }
+    return jsonify(response), 500
+  
+  response = {
+    "message": "Sale recorded successfully.",
+    "purchase_id": Purchase_ID
+  }
+  return jsonify(response), 201
 
 # Application 2 API
 # Schedule a new appointment. Drop off and pick up time, and packages are recorded later. Returns the generated appointment ID
