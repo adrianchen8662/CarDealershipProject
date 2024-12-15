@@ -29,6 +29,21 @@ def add_customer_form():
 def list_sales_form():
     return render_template('list_sales.html')
 
+@app.route('/schedule_appointment', methods=['GET'])
+def schedule_appointment():
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("""
+        SELECT * FROM Time_Slot 
+        WHERE Time_Slot_ID NOT IN (SELECT Time_Slot_Time_Slot_ID FROM Appointment)
+    """)
+    time_slots = mycursor.fetchall()
+    return render_template('schedule_appointment.html', time_slots=time_slots)
+
+
+@app.route('/appointment_details', methods=['GET'])
+def appointment_details():
+    return render_template('appointment_details.html')
+
 # Internal function to find if customer exists based on email
 def find_customer(email):
   mycursor = mydb.cursor()
@@ -187,15 +202,15 @@ def new_appointment():
   Customer_Customer_ID = find_customer(request.args['email'])
   Car_Car_ID = request.args['car_car_id']
   
-  Appointment_ID  = random.randint(100000,999999)
-
+  Appointment_ID = random.randint(100000, 999999)
+  
   mycursor = mydb.cursor()
   mycursor.execute(f"""
       INSERT INTO Appointment (Appointment_ID, Appointment_Made_Date, Time_Slot_Time_Slot_ID, Customer_Customer_ID, Car_Car_ID)
       VALUES ('{Appointment_ID}', '{Appointment_Made_Date}', '{Time_Slot_Time_Slot_ID}', '{Customer_Customer_ID}', '{Car_Car_ID}');
   """)
-
-  return Appointment_ID
+  mydb.commit()
+  return f"Appointment created with ID: {Appointment_ID}"
   
 @app.route("/dropped_car_off", methods=['POST'])
 def dropped_car_off():
@@ -208,6 +223,7 @@ def dropped_car_off():
       SET Drop_Off = "{Drop_Off}"
       WHERE Appointment_ID = {Appointment_ID};
   """)
+  return "Drop-Off Time Updated. "
 
 @app.route("/picked_car_up", methods=['POST'])
 def picked_car_up():
@@ -220,6 +236,7 @@ def picked_car_up():
       SET Package_Package_ID = "{Package_Package_ID}"
       WHERE Appointment_ID = {Appointment_ID};
   """)
+  return "Pick-Up Time Updated. "
 
 @app.route("/set_package", methods=['POST'])
 def set_package():
@@ -232,6 +249,7 @@ def set_package():
       SET Pick_Up = "{Pick_Up}"
       WHERE Appointment_ID = {Appointment_ID};
   """)
+  return "Package updated. "
 
 @app.route("/generate_bill", methods=['GET'])
 def generate_bill():

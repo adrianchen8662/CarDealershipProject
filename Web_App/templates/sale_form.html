@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Sale</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -39,7 +40,11 @@
             margin: 20px auto;
         }
 
-        input[type="email"], input[type="number"], input[type="date"], button {
+        input[type="email"], 
+        input[type="number"], 
+        input[type="date"], 
+        input[type="text"], 
+        button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -59,21 +64,25 @@
             background-color: #4951c8;
         }
 
-        /* Back Button Style */
-        .back-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #5c67f2;
+        /* Back Button Bar */
+        .back-btn-bar {
+            background-color: #333;
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        .back-btn:hover {
+        .back-btn-bar:hover {
             background-color: #4951c8;
         }
+
     </style>
 </head>
 <body>
@@ -104,30 +113,30 @@
     <button type="submit">Record Sale</button>
 </form>
 
-<!-- Back to Main Page Button -->
-<button class="back-btn" onclick="window.location.href='/';">Back to Main Page</button>
+<!-- Back to Main Page Bar -->
+<div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
 
 <script>
-  document.getElementById('saleForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
-      
-      fetch('/record_sale', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(data => {
-          alert(data.message);
-          if (data.status === 'customer_not_found') {
-              window.location.href = '/add_customer_form';  // Redirect to the add customer form
-          }
-      })
-      .catch(error => console.error('Error:', error));
-  });
+    document.getElementById('saleForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        fetch('/record_sale', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'customer_not_found') {
+                window.location.href = '/add_customer_form';  // Redirect to the add customer form
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
 </script>
 
 </body>

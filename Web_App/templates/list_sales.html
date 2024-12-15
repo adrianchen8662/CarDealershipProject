@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Sales</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -79,18 +80,22 @@
             background-color: #f4f4f9;
         }
 
-        .back-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #5c67f2;
+        /* Back Button Bar */
+        .back-btn-bar {
+            background-color: #333;
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        .back-btn:hover {
+        .back-btn-bar:hover {
             background-color: #4951c8;
         }
     </style>
@@ -125,8 +130,8 @@
     <tbody id="salesTableBody"></tbody>
 </table>
 
-<!-- Back to Main Page Button -->
-<button class="back-btn" onclick="window.location.href='/';">Back to Main Page</button>
+<!-- Back to Main Page Bar -->
+<div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
 
 <script>
     document.getElementById('salesForm').addEventListener('submit', function(event) {
