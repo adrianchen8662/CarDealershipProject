@@ -13,30 +13,30 @@
         .btn:hover { background-color: #4951c8; }
     </style>
 </head>
-<body>
-    <h1>Itemized Bill</h1>
-    {% if bill %}
-    <table>
-        <tr>
-            <th>Customer Name</th>
-            <td>{{ bill.F_Name }} {{ bill.L_Name }}</td>
-        </tr>
-        <tr>
-            <th>Labor Cost</th>
-            <td>${{ "%.2f"|format(bill.Total_Labor_Cost) }}</td>
-        </tr>
-        <tr>
-            <th>Parts Cost</th>
-            <td>${{ "%.2f"|format(bill.Total_Parts_Cost or 0) }}</td>
-        </tr>
-        <tr>
-            <th>Total Amount</th>
-            <td>${{ "%.2f"|format(bill.Total_Amount) }}</td>
-        </tr>
-    </table>
-    {% else %}
-        <p style="text-align: center;">No bill data found for this appointment.</p>
-    {% endif %}
-    <a href="/" class="btn">Back to Main Page</a>
-</body>
+    <body>
+        <h1>Itemized Bill</h1>
+        {% if bill %}
+        <table>
+            <tr>
+                <th>Customer Name</th>
+                <td>{{ bill.F_Name }} {{ bill.L_Name }}</td>
+            </tr>
+            <tr>
+                <th>Labor Cost</th>
+                <td>${{ "%.2f"|format(bill.Total_Labor_Cost or 0) }}</td>
+            </tr>
+            <tr>
+                <th>Parts Cost</th>
+                <td>${{ "%.2f"|format(bill.Total_Parts_Cost or 0) }}</td>
+            </tr>
+            <tr>
+                <th>Total Amount</th>
+                <td>${{ "%.2f"|format(bill.Total_Amount or 0) }}</td>
+            </tr>            
+        </table>
+        {% else %}
+            <p style="text-align: center;">No bill data found for this appointment.</p>
+        {% endif %}
+        <a href="/" class="btn">Back to Main Page</a>
+    </body>
 </html>

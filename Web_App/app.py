@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, jsonify, redirect, flash, url_for
 import mysql.connector
+from decimal import Decimal
 import random
 import os
 
@@ -41,7 +42,6 @@ def schedule_appointment():
     time_slots = mycursor.fetchall()
     return render_template('schedule_appointment.html', time_slots=time_slots)
 
-
 @app.route('/appointment_details', methods=['GET'])
 def appointment_details():
     return render_template('appointment_details.html')
@@ -57,6 +57,7 @@ def find_customer(email):
   myresult = mycursor.fetchone()
   return myresult
 
+# Find Customer who owns car using Owns lookup table
 def find_customer_by_car(car_id):
     mycursor = mydb.cursor()
     mycursor.execute("""
@@ -67,8 +68,6 @@ def find_customer_by_car(car_id):
     result = mycursor.fetchone()
     return result[0] if result else None
 
-
-# Application 1 API
 # Internal function to check if car exists
 def find_car(car_id):
   mycursor = mydb.cursor()
@@ -80,14 +79,18 @@ def find_car(car_id):
   myresult = mycursor.fetchone()
   return myresult
 
-# API to add or update customer information if not found
+'''
+==========================================================
+Application 1 API
+==========================================================
+'''
 @app.route('/add_customer', methods=['POST'])
 def add_customer():
-  data = request.json  # Expecting JSON input
+  data = request.json
   Email = data['email']
   Customer = find_customer(Email)
 
-  if Customer is None:  # Customer does not exist, request more information
+  if Customer is None:
     response = {
       "message": "Customer not found. Please provide first name, last name, and other details.",
       "status": "customer_not_found"
@@ -102,7 +105,7 @@ def add_customer():
 
 @app.route('/create_customer', methods=['POST'])
 def create_customer():
-  data = request.json  # Expecting JSON input
+  data = request.json
   F_Name = data['f_name']
   M_Init = data.get('m_init', '')
   L_Name = data['l_name']
@@ -147,10 +150,9 @@ def get_time_slots():
 
     return jsonify({"time_slots": time_slots}), 200
 
-# Records sale to relevant tables and junction tables
 @app.route('/record_sale', methods=['POST'])
 def record_sale():
-  data = request.json  # Expecting JSON input
+  data = request.json
   Email = data['email']
   Car_ID = data['car_id']
   Date_Of_Purchase = data['date_of_purchase']
@@ -159,7 +161,7 @@ def record_sale():
   License_Plate = data['license_plate']
 
   Customer = find_customer(Email)
-  if Customer is None:  # Customer does not exist, request more information
+  if Customer is None:
     response = {
       "message": "Customer not found. Redirecting to add customer form.",
       "status": "customer_not_found"
@@ -167,7 +169,7 @@ def record_sale():
     return jsonify(response), 404
   
   Car = find_car(Car_ID)
-  if Car is None:  # Car does not exist, return error
+  if Car is None:
     response = {
       "message": "Car not found. Please ensure the Car ID is correct.",
       "status": "car_not_found"
@@ -215,8 +217,11 @@ def record_sale():
   }
   return jsonify(response), 201
 
-# Application 2 API
-# Schedule a new appointment. Drop off and pick up time, and packages are recorded later. Returns the generated appointment ID
+'''
+==========================================================
+Application 2 API
+==========================================================
+'''
 @app.route("/new_appointment", methods=['GET','POST'])
 def new_appointment():
   Appointment_Made_Date = request.args['appointment_made_date']
@@ -254,7 +259,6 @@ def dropped_car_off():
     flash("Drop-off time updated successfully!", "success")
     return redirect(url_for('appointment_details'))
 
-
 @app.route("/picked_car_up", methods=['POST'])
 def picked_car_up():
     Appointment_ID = request.form.get('appointment_id')
@@ -274,7 +278,6 @@ def picked_car_up():
 
     flash("Pick-up information updated successfully!", "success")
     return redirect(url_for('appointment_details'))
-
 
 @app.route("/set_package", methods=['POST'])
 def set_package():
@@ -296,20 +299,17 @@ def set_package():
     flash("Package details updated successfully!", "success")
     return redirect(url_for('appointment_details'))
 
-
 @app.route("/generate_bill", methods=["GET"])
 def generate_bill():
     Appointment_ID = request.args.get("appointment_id")
     mycursor = mydb.cursor(dictionary=True)
-    
+
     mycursor.execute("""
         SELECT a.Appointment_ID, c.F_Name, c.L_Name,
-               SUM(wp.Labor_Cost) AS Total_Labor_Cost,
-               SUM(pt.Cost_of_Part) AS Total_Parts_Cost,
-               SUM(wp.Labor_Cost) + IFNULL(SUM(pt.Cost_of_Part), 0) AS Total_Amount
+               IFNULL(SUM(pt.Cost_of_Part), 0) AS Total_Parts_Cost,
+               IFNULL(SUM(pt.Cost_of_Part), 0) AS Total_Amount
         FROM Appointment a
         JOIN Customer c ON a.Customer_Customer_ID = c.Customer_ID
-        LEFT JOIN Was_Performed wp ON a.Appointment_ID = wp.Appointment_Appointment_ID
         LEFT JOIN Was_Replaced wr ON a.Appointment_ID = wr.Appointment_Appointment_ID
         LEFT JOIN Part pt ON wr.Part_Part_ID = pt.Part_ID
         WHERE a.Appointment_ID = %s
@@ -317,10 +317,22 @@ def generate_bill():
     """, (Appointment_ID,))
     bill = mycursor.fetchone()
 
+    if not bill:
+        flash("No bill data found for the given appointment ID.", "error")
+        return redirect(url_for('appointment_details'))
+
+    # Generate random labor cost as Decimal
+    random_labor_cost = Decimal(f"{random.uniform(500, 2000):.2f}")
+    bill['Total_Labor_Cost'] = random_labor_cost
+    bill['Total_Amount'] += random_labor_cost
+
     return render_template("bill_details.html", bill=bill)
 
-
-# Application 3 API
+'''
+==========================================================
+Application 3 API
+==========================================================
+'''
 @app.route('/list_sales', methods=['GET'])
 def list_sales():
   start_date = request.args['start_date']
@@ -356,5 +368,6 @@ def list_sales():
   myresult = mycursor.fetchall()
   return myresult
 
+# main function to run WebApp
 if __name__ == '__main__':
   app.run(debug=True)

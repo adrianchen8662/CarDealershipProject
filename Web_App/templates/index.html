@@ -1,107 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Dealership Dashboard</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Car Dealership Dashboard</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            text-align: center;
-            line-height: 1.6;
-        }
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                text-align: center;
+                line-height: 1.6;
+            }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem 0;
-        }
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 1rem 0;
+            }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+            header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
 
-        p {
-            margin-bottom: 1rem;
-        }
+            p {
+                margin-bottom: 1rem;
+            }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-        }
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 80vh;
+            }
 
-        .btn-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
+            .btn-container {
+                display: flex;
+                gap: 20px;
+                margin-top: 20px;
+            }
 
-        .btn {
-            display: inline-block;
-            background-color: #5c67f2;
-            color: #fff;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+            .btn {
+                display: inline-block;
+                background-color: #5c67f2;
+                color: #fff;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.3s ease-in-out;
+            }
 
-        .btn:hover {
-            background-color: #4951c8;
-            transform: scale(1.05);
-        }
+            .btn:hover {
+                background-color: #4951c8;
+                transform: scale(1.05);
+            }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
+            .btn:active {
+                transform: scale(0.95);
+            }
 
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
+            footer {
+                background-color: #333;
+                color: #fff;
+                padding: 1rem 0;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
 
-    <header>
-        <h1>Welcome to the Car Dealership Dashboard</h1>
-        <p>Created by Adrian Chen for CS 631 Fall 2024 Final Project</p>
-    </header>
+        <header>
+            <h1>Welcome to the Car Dealership Dashboard</h1>
+            <p>Created by Adrian Chen for CS 631 Fall 2024 Final Project</p>
+        </header>
 
-    <div class="container">
-        <h1>Applications</h1>
-        
-        <div class="btn-container">
-            <a href="/sale_form" class="btn">Record New Sale - Application 1</a>
-            <a href ="/schedule_appointment" class = "btn"> Maintenance - Application 2</a>
-            <a href ="/appointment_details" class = "btn"> Appointment Details - Application 2</a>
-            <a href="/list_sales_form" class="btn">View Sales Report - Application 3</a>
+        <div class="container">
+            <h1>Applications</h1>
+            
+            <div class="btn-container">
+                <a href="/sale_form" class="btn">Record New Sale - Application 1</a>
+                <a href ="/schedule_appointment" class = "btn"> Maintenance - Application 2</a>
+                <a href ="/appointment_details" class = "btn"> Appointment Details - Application 2</a>
+                <a href="/list_sales_form" class="btn">View Sales Report - Application 3</a>
+            </div>
         </div>
-    </div>
 
-    <footer>
-        <p>Car Dealership Management System, made in Python Flask</p>
-    </footer>
-
-</body>
+        <footer>
+            <p>Car Dealership Management System, made in Python Flask</p>
+        </footer>
+    </body>
 </html>

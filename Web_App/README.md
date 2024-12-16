@@ -1,14 +1,58 @@
 # Car Dealership Project Backend
-Created using Python Flask
+Created using Python Flask and its functions to provide a basic full stack environment. 
+HTML templates include custom CSS and Javascripting to allow for a more cohesive and easier to understand experience.
+Not all inputs have been sanitized to save time, so typing something that you shouldn't could cause problems. 
 
 ## Dependencies
 mysql-connector-python
 flask
 
-These can be installed using pip
+These can be installed using pip, i.e. <strong>pip install flask</strong> or <strong>pip install mysql-connector-python</strong>
 
 ## How to Run
-Backend can be started using "flask run" in the Back_End directory
+The Webapp can be started typing py app.py in the Web_App directory
+Once the application has started, navigate to http://127.0.0.1:5000 on your browser to access the application. 
+
+There are four buttons:
+Record New Sale - Application 1
+    This allows for a salesperson or manager to record the sale of a car to a customer. If the customer email is not recognized, the customer's information will be asked to be added. 
+
+Maintenance - Application 2
+    This is the first part of Application 2 where customers can schedule for an appointment and pick a time slot that works for them. The time slots were generated to be a year long, so the dropdown menu contains a lot of entries. 
+
+Appointment Details - Application 2
+    This is the second part of Application 2 that allows for the dealership mechanics to log drop-off times, pick-up times, packages to add to a car, and to generate a bill. 
+
+View Sales Report - Application 3
+    This shows the sales based on a start and end date. Data has only been populated for the years 2022 to 2023, so anything selected outside of those bounds will show no sales. 
+
+## HTML Templates
+/ - index.html
+/sale_form - sale_form.html
+/add_customer_form - add_customer.html. Not directly accessed, but accessed through /sale_form
+/list_sales_form - list_sales.html
+/schedule_appointment - schedule_appointment.html
+/appointment_details - appointment_details.html
+/bill_details - bill_details.html. Not directly accessed, but accessed through /appointment_details
+
+## Internal Functions
+find_customer(email)
+find_customer_by_car(car_id)
+find_car(car_id)
 
 ## API
-TBD
+### Application 1
+/add_customer
+/create_customer
+/get_time_slots
+/record_sale
+
+### Application 2
+/new_appointment", methods=['GET','POST']
+/dropped_car_off, methods=['POST']
+/picked_car_up, methods=['POST']
+/set_package, methods=['POST']
+/generate_bill, methods=["GET"]
+
+### Application 3
+/list_sales, methods=['GET']

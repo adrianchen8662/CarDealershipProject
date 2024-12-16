@@ -1,180 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointment Details</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Appointment Details</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            text-align: center;
-            line-height: 1.6;
-        }
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                text-align: center;
+                line-height: 1.6;
+            }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem 0;
-        }
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 1rem 0;
+            }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+            header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
 
-        .container {
-            padding: 2rem;
-        }
+            .container {
+                padding: 2rem;
+            }
 
-        form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-        }
+            form {
+                background-color: #fff;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+                margin: 20px auto;
+            }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: left;
-        }
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 10px;
+                text-align: left;
+            }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+            input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
 
-        .btn-container {
-            display: flex;
-            justify-content: center;
-        }
+            .btn-container {
+                display: flex;
+                justify-content: center;
+            }
 
-        .btn {
-            display: inline-block;
-            background-color: #5c67f2;
-            color: #fff;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+            .btn {
+                display: inline-block;
+                background-color: #5c67f2;
+                color: #fff;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.3s ease-in-out;
+            }
 
-        .btn:hover {
-            background-color: #4951c8;
-        }
+            .btn:hover {
+                background-color: #4951c8;
+            }
 
-        .back-btn-bar {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
+            .back-btn-bar {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 1rem 0;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease-in-out;
+            }
 
-        .back-btn-bar:hover {
-            background-color: #4951c8;
-        }
+            .back-btn-bar:hover {
+                background-color: #4951c8;
+            }
 
-        .notifications ul {
-            list-style: none;
-            padding: 0;
-            margin: 10px auto;
-            max-width: 400px;
-            text-align: center;
-        }
+            .notifications ul {
+                list-style: none;
+                padding: 0;
+                margin: 10px auto;
+                max-width: 400px;
+                text-align: center;
+            }
 
-        .notifications li {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-        }
+            .notifications li {
+                padding: 10px;
+                margin: 5px 0;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+            }
 
-        .notifications li.success {
-            background-color: #4CAF50; /* Green */
-        }
+            .notifications li.success {
+                background-color: #4CAF50;
+            }
 
-        .notifications li.error {
-            background-color: #f44336; /* Red */
-        }
+            .notifications li.error {
+                background-color: #f44336;
+            }
 
-    </style>
-</head>
-<body>
+        </style>
+    </head>
+    <body>
 
-    <header>
-        <h1>Appointment Details</h1>
-    </header>
+        <header>
+            <h1>Appointment Details</h1>
+        </header>
 
-    <div class="notifications">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul>
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
-    </div>    
+        <div class="notifications">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+        </div>    
 
-    <div class="container">
-        <!-- Forms for various actions -->
-        <form action="/dropped_car_off" method="POST">
-            <h2>Drop Off Car</h2>
-            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
-            <input type="datetime-local" name="drop_off" required>
-            <input type="submit" value="Drop Off Car" class="btn">
-        </form>
+        <div class="container">
+            <form action="/dropped_car_off" method="POST">
+                <h2>Drop Off Car</h2>
+                <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+                <input type="datetime-local" name="drop_off" required>
+                <input type="submit" value="Drop Off Car" class="btn">
+            </form>
 
-        <form action="/picked_car_up" method="POST">
-            <h2>Pick Up Car</h2>
-            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
-            <input type="datetime-local" name="pick_up" required>
-            <input type="submit" value="Pick Up Car" class="btn">
-        </form>
+            <form action="/picked_car_up" method="POST">
+                <h2>Pick Up Car</h2>
+                <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+                <input type="datetime-local" name="pick_up" required>
+                <input type="submit" value="Pick Up Car" class="btn">
+            </form>
 
-        <form action="/set_package" method="POST">
-            <h2>Set Package</h2>
-            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
-            <input type="text" name="package_id" placeholder="Package ID" required>
-            <input type="submit" value="Set Package" class="btn">
-        </form>
+            <form action="/set_package" method="POST">
+                <h2>Set Package</h2>
+                <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+                <input type="text" name="package_id" placeholder="Package ID" required>
+                <input type="submit" value="Set Package" class="btn">
+            </form>
 
-        <form action="/generate_bill" method="GET">
-            <h2>Generate Bill</h2>
-            <input type="text" name="appointment_id" placeholder="Appointment ID" required>
-            <input type="submit" value="Generate Bill" class="btn">
-        </form>
-    </div>
-
-    <!-- Back to Main Page Bar -->
-    <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
-
-</body>
+            <form action="/generate_bill" method="GET">
+                <h2>Generate Bill</h2>
+                <input type="text" name="appointment_id" placeholder="Appointment ID" required>
+                <input type="submit" value="Generate Bill" class="btn">
+            </form>
+        </div>
+        <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
+    </body>
 </html>

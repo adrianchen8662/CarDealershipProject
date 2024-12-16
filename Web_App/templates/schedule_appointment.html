@@ -1,186 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule Appointment</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schedule Appointment</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            text-align: center;
-            line-height: 1.6;
-        }
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                text-align: center;
+                line-height: 1.6;
+            }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem 0;
-        }
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 1rem 0;
+            }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+            header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            }
 
-        form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
+            form {
+                background-color: #fff;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+            }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: left;
-        }
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 10px;
+                text-align: left;
+            }
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+            input, select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
 
-        .btn-container {
-            display: flex;
-            justify-content: center;
-        }
+            .btn-container {
+                display: flex;
+                justify-content: center;
+            }
 
-        .btn {
-            display: inline-block;
-            background-color: #5c67f2;
-            color: #fff;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+            .btn {
+                display: inline-block;
+                background-color: #5c67f2;
+                color: #fff;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.3s ease-in-out;
+            }
 
-        .btn:hover {
-            background-color: #4951c8;
-            transform: scale(1.05);
-        }
+            .btn:hover {
+                background-color: #4951c8;
+                transform: scale(1.05);
+            }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
+            .btn:active {
+                transform: scale(0.95);
+            }
 
-        .back-btn-bar {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
+            .back-btn-bar {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 1rem 0;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease-in-out;
+            }
 
-        .back-btn-bar:hover {
-            background-color: #4951c8;
-        }
-    </style>
-</head>
-<body>
+            .back-btn-bar:hover {
+                background-color: #4951c8;
+            }
+        </style>
+    </head>
+    <body>
 
-    <header>
-        <h1>Schedule an Appointment</h1>
-    </header>
+        <header>
+            <h1>Schedule an Appointment</h1>
+        </header>
 
-    <div class="container">
-        <form action="/new_appointment" method="GET" onsubmit="return validateForm()">
-            <label for="email">Customer Email:</label>
-            <input type="email" id="email" name="email" required>
+        <div class="container">
+            <form action="/new_appointment" method="GET" onsubmit="return validateForm()">
+                <label for="email">Customer Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <label for="car_id">Car ID:</label>
-            <input type="text" id="car_id" name="car_car_id" required>
+                <label for="car_id">Car ID:</label>
+                <input type="text" id="car_id" name="car_car_id" required>
 
-            <label for="appointment_date">Appointment Date:</label>
-            <input type="date" id="appointment_date" name="appointment_made_date" required onchange="fetchAvailableTimeSlots()">
+                <label for="appointment_date">Appointment Date:</label>
+                <input type="date" id="appointment_date" name="appointment_made_date" required onchange="fetchAvailableTimeSlots()">
 
-            <label for="time_slot">Select Available Time Slot:</label>
-            <select id="time_slot" name="time_slot_time_slot_id" required>
-                <option value="">Select a time slot</option>
-            </select>
+                <label for="time_slot">Select Available Time Slot:</label>
+                <select id="time_slot" name="time_slot_time_slot_id" required>
+                    <option value="">Select a time slot</option>
+                </select>
 
-            <div class="btn-container">
-                <input type="submit" value="Schedule Appointment" class="btn">
-            </div>
-        </form>
-    </div>
+                <div class="btn-container">
+                    <input type="submit" value="Schedule Appointment" class="btn">
+                </div>
+            </form>
+        </div>
 
-    <!-- Back to Main Page Bar -->
-    <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
+        <div class="back-btn-bar" onclick="window.location.href='/';">Back to Main Page</div>
 
-    <script>
-        // Fetch available time slots for the selected appointment date
-        async function fetchAvailableTimeSlots() {
-            const appointmentDate = document.getElementById('appointment_date').value;
-            const timeSlotSelect = document.getElementById('time_slot');
+        <script>
+            async function fetchAvailableTimeSlots() {
+                const appointmentDate = document.getElementById('appointment_date').value;
+                const timeSlotSelect = document.getElementById('time_slot');
 
-            // Clear the existing options
-            timeSlotSelect.innerHTML = '<option value="">Loading...</option>';
+                timeSlotSelect.innerHTML = '<option value="">Loading...</option>';
 
-            try {
-                const response = await fetch(`/get_time_slots?date=${appointmentDate}`);
-                const data = await response.json();
+                try {
+                    const response = await fetch(`/get_time_slots?date=${appointmentDate}`);
+                    const data = await response.json();
 
-                timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+                    timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
 
-                if (data.time_slots && data.time_slots.length > 0) {
-                    data.time_slots.forEach(slot => {
-                        const startTime = new Date(slot.Start_Time).toLocaleString();
-                        const endTime = new Date(slot.End_Time).toLocaleString();
-                        const option = document.createElement('option');
-                        option.value = slot.Time_Slot_ID;
-                        option.textContent = `From: ${startTime} To: ${endTime}`;
-                        timeSlotSelect.appendChild(option);
-                    });
-                } else {
-                    timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                    if (data.time_slots && data.time_slots.length > 0) {
+                        data.time_slots.forEach(slot => {
+                            const startTime = new Date(slot.Start_Time).toLocaleString();
+                            const endTime = new Date(slot.End_Time).toLocaleString();
+                            const option = document.createElement('option');
+                            option.value = slot.Time_Slot_ID;
+                            option.textContent = `From: ${startTime} To: ${endTime}`;
+                            timeSlotSelect.appendChild(option);
+                        });
+                    } else {
+                        timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching time slots:', error);
+                    timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
                 }
-            } catch (error) {
-                console.error('Error fetching time slots:', error);
-                timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
             }
-        }
 
-        // Validate form before submission
-        function validateForm() {
-            const timeSlot = document.getElementById('time_slot').value;
-            if (!timeSlot) {
-                alert("Please select a valid time slot for the chosen appointment date.");
-                return false;
+            function validateForm() {
+                const timeSlot = document.getElementById('time_slot').value;
+                if (!timeSlot) {
+                    alert("Please select a valid time slot for the chosen appointment date.");
+                    return false;
+                }
+                return true;
             }
-            return true;
-        }
-    </script>
-</body>
+        </script>
+    </body>
 </html>
