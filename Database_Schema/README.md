@@ -89,16 +89,42 @@ With an instance of MySQL open in MySQL Workbench, select in the side Navigator 
 |-----------------------|---------------------------------|
 | Customer_Customer_ID  | Foreign Key from table Customer |
 | Purchase_Purchase_ID  | Foreign Key from table Purchase |
-
 #### Appointments
-TODO
+| **Field_Name**         | **Type**                                |
+|------------------------|-----------------------------------------|
+| Appointment_ID         | Number, from 100000 to 999999           |
+| Drop_Off               | Datetime, from 01/01/2022 to 12/31/2022 |
+| Pick_Up                | Datetime, from 01/01/2023 to 12/31/2023 |
+| Appointment_Made_Date  | Datetime, from 01/01/2021 to 12/31/2021 |
+| Package_Package_ID     | Foreign Key from table Package          |
+| Time_Slot_Time_Slot_ID | Foreign Key from table Time Slot        |
+| Customer_Customer_ID   | Foreign Key from table Customer         |
+| Car_Car_ID             | Foreign Key from table Car              |
 #### Additionally Scheduled
-TODO
+| **Field_Name**        | **Type**                        |
+|-----------------------|---------------------------------|
+| Customer_Customer_ID  | Foreign Key from table Customer |
+| Purchase_Purchase_ID  | Foreign Key from table Purchase |
 #### Was Performed
-TODO
+| **Field_Name**     | **Type**                            |
+|--------------------|-------------------------------------|
+| Labor_Cost         | Number, from 1 to 1000              |
+| Time               | Time, 12:00 AM to 11:59 PM, 24 Hour |
+| Package_Package_ID | Foreign Key from table Package      |
+| Task_Task_ID       | Foreign Key from table Task         |
 #### Recommends
-TODO
+| **Field_Name**     | **Type**                       |
+|--------------------|--------------------------------|
+| Is_Mandatory       | Boolean                        |
+| Package_Package_ID | Foreign Key from table Package |
+| Task_Task_ID       | Foreign Key from table Task    |
 #### Was Replaced
-TODO
+| **Field_Name**             | **Type**                           |
+|----------------------------|------------------------------------|
+| Appointment_Appointment_ID | Foreign Key from table Appointment |
+| Part_Part_ID               | Foreign Key from table Part        |
 #### Failure Requires
-TODO
+| **Field_Name** | **Type**                    |
+|----------------|-----------------------------|
+| Task_Task_ID1  | Foreign Key from table Task |
+| Task_Task_ID2  | Foreign Key from table Task |
