@@ -113,6 +113,31 @@
         <header>
             <h1>Schedule an Appointment</h1>
         </header>
+        
+        <!-- Flashed messages block -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-messages" style="margin: 1rem auto; max-width: 400px;">
+                    {% for category, message in messages %}
+                        <div style="
+                            padding: 1rem; 
+                            margin-bottom: 1rem; 
+                            border-radius: 5px; 
+                            color: white; 
+                            background-color: 
+                                {% if category == 'success' %} green; 
+                                {% elif category == 'error' %} red; 
+                                {% else %} gray; 
+                                {% endif %}
+                        ">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+
 
         <div class="container">
             <form action="/new_appointment" method="GET" onsubmit="return validateForm()">

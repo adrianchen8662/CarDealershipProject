@@ -222,22 +222,35 @@ def record_sale():
 Application 2 API
 ==========================================================
 '''
-@app.route("/new_appointment", methods=['GET','POST'])
+@app.route("/new_appointment", methods=['GET', 'POST'])
 def new_appointment():
-  Appointment_Made_Date = request.args['appointment_made_date']
-  Time_Slot_Time_Slot_ID = request.args['time_slot_time_slot_id']
-  Customer_Customer_ID = find_customer(request.args['email'])
-  Car_Car_ID = request.args['car_car_id']
-  
-  Appointment_ID = random.randint(100000, 999999)
-  
-  mycursor = mydb.cursor()
-  mycursor.execute(f"""
-      INSERT INTO Appointment (Appointment_ID, Appointment_Made_Date, Time_Slot_Time_Slot_ID, Customer_Customer_ID, Car_Car_ID)
-      VALUES ('{Appointment_ID}', '{Appointment_Made_Date}', '{Time_Slot_Time_Slot_ID}', '{Customer_Customer_ID}', '{Car_Car_ID}');
-  """)
-  mydb.commit()
-  return f"Appointment created with ID: {Appointment_ID}"
+    Appointment_Made_Date = request.args['appointment_made_date']
+    Time_Slot_Time_Slot_ID = request.args['time_slot_time_slot_id']
+    customer = find_customer(request.args['email'])
+    car_car_id = request.args['car_car_id']
+
+    if customer is None:
+        flash("Customer not found. Please ensure the email is correct.", "error")
+        return redirect(url_for('schedule_appointment'))
+
+    Customer_Customer_ID = customer[0]
+    Appointment_ID = random.randint(100000, 999999)
+
+    try:
+        mycursor = mydb.cursor()
+        mycursor.execute("""
+            INSERT INTO Appointment (Appointment_ID, Appointment_Made_Date, Package_Package_ID, Time_Slot_Time_Slot_ID, Customer_Customer_ID, Car_Car_ID)
+            VALUES (%s, %s, %s, %s, %s, %s);
+        """, (Appointment_ID, Appointment_Made_Date, "127392", Time_Slot_Time_Slot_ID, Customer_Customer_ID, car_car_id))
+        mydb.commit()
+
+        flash(f"Appointment successfully scheduled with ID: {Appointment_ID}", "success")
+        return redirect(url_for('schedule_appointment'))
+
+    except mysql.connector.Error as err:
+        mydb.rollback()
+        flash(f"An error occurred: {err}", "error")
+        return redirect(url_for('schedule_appointment'))
   
 @app.route("/dropped_car_off", methods=['POST'])
 def dropped_car_off():
