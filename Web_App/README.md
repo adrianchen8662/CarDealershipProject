@@ -3,15 +3,15 @@ The application is a web application developed in Python using the Flask reposit
 You will need to install the Flask and MySQL Connector libraries for this application to work. Flask handles the backend REST API calls along with the HTML rendering, while MySQL handles the SQL queries to the MySQL database instance. 
 Pages are created using HTML and some Javascript/CSS where appropriate, such as styling and allowing for notifications or auto-populating fields, such as the time slot. 
 
-Application 1
+**Application 1**
 
 This application is rendered using sale_form.html and add_customer_form.html. It didn’t make sense to have each sale form reference the customer by the primary key, so a separate helper call is made to check if the customer exists. If not, it redirects to the add_customer_form to allow for a customer to be added. It can then go back to the sale form the complete the purchase. 
 
-Application 2
+**Application 2**
 
 This application is rendered using schedule_appointment.html, appointment_details.thml and bill_details.html. An appointment can be scheduled through schedule_appointment. This also is able to figure out what package is needed based on the time period of the car being requested. Appointment Details is meant for the service member at the dealership to log drop-off, pick-up and package details to add to the car. Appointment Details also contains the ability to print the receipt in Bill Details. 
 
-Application 3
+**Application 3**
 
 This application queries the database to pull up sales done in a certain time period. It sorts by the Make, Model then Year. 
 
