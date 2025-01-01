@@ -1,4 +1,4 @@
-# CarDealershipProject
+# Car Dealership Project
 NJIT Fall 2024 CS 631 Data Management Systems Design Final Project
 
 Created by Adrian Chen using Python Flask. 
