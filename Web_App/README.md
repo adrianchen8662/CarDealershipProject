@@ -55,16 +55,25 @@ find_car(car_id)
 ## API
 ### Application 1
 /add_customer
+
 /create_customer
+
 /get_time_slots
+
 /record_sale
+
 
 ### Application 2
 /new_appointment", methods=['GET','POST']
+
 /dropped_car_off, methods=['POST']
+
 /picked_car_up, methods=['POST']
+
 /set_package, methods=['POST']
+
 /generate_bill, methods=["GET"]
+
 
 ### Application 3
 /list_sales, methods=['GET']
