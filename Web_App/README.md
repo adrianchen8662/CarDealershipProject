@@ -40,17 +40,27 @@ View Sales Report - Application 3
 
 ## HTML Templates
 / - index.html
+
 /sale_form - sale_form.html
+
 /add_customer_form - add_customer.html. Not directly accessed, but accessed through /sale_form
+
 /list_sales_form - list_sales.html
+
 /schedule_appointment - schedule_appointment.html
+
 /appointment_details - appointment_details.html
+
 /bill_details - bill_details.html. Not directly accessed, but accessed through /appointment_details
+
 
 ## Internal Functions
 find_customer(email)
+
 find_customer_by_car(car_id)
+
 find_car(car_id)
+
 
 ## API
 ### Application 1
